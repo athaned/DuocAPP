@@ -1,0 +1,30 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>recuperar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">recuperar</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="centered-container">
+    <ion-list>
+      <ion-item>
+        <ion-input [(ngModel)]="username" placeholder="Usuario" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input [(ngModel)]="newPassword" placeholder="Nueva Contraseña" type="password"></ion-input>
+      </ion-item>
+      <ion-button expand="block" color="primary" class="main-button" (click)="updatePassword()">Actualizar Contraseña</ion-button>
+      
+      <ion-item lines="none">
+        <a class="recover-link" [routerLink]="['/']">Volver</a>
+      </ion-item>
+    </ion-list>
+  </div>
+
+</ion-content>

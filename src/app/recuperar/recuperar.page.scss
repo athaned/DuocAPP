@@ -1,0 +1,31 @@
+.centered-container {
+    text-align: center;
+    margin: 2rem;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 30%;
+  }
+  
+.main-button {
+    margin-top: 1rem;
+    width: 7rem;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 1rem;
+    color: white;
+    text-shadow: 1px 1px 2px black;
+    text-align: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+  
+.recover-link {
+    color: #3880ff;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+.recover-link:hover {
+    text-decoration: underline;
+  }

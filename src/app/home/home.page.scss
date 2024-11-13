@@ -1,0 +1,48 @@
+#container {
+  text-align: center;
+  margin: 2rem;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 30%;
+}
+
+#container strong {
+  font-size: 20px;
+  line-height: 26px;
+}
+
+#container p {
+  font-size: 16px;
+  line-height: 22px;
+  color: #8c8c8c;
+  margin: 0;
+}
+
+#container a {
+  text-decoration: none;
+}
+
+#btn-iniciar {
+  margin-top: 1rem;
+  width: 7rem;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 1rem;
+  color: white;
+  text-shadow: 1px 1px 2px black;
+}
+
+#botones-login{
+  text-align: center;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+#recuperarPass:hover{
+  text-decoration: underline; 
+}
+
+#register:hover{
+  text-decoration: underline; 
+}

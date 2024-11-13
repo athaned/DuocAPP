@@ -1,0 +1,40 @@
+#centrar {
+    text-align: center;
+    margin-top: 4rem;
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .boton-clases {
+    --color: white; 
+    border-radius: 15px;
+    font-size: 20px;
+    max-width: 200px;
+    margin-left: 15px;
+    color: white; 
+    display: flex;
+    justify-content: center; 
+    margin-top: 2rem;
+    margin-bottom: .5rem;
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .lista-clases{
+    margin-top: .5rem;
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .qr-clases {
+    margin-top: .5rem;
+    display: flex;
+    justify-content: center;
+    margin-bottom: .5rem;
+  }
+  
+  .boton-deseleccionar {
+    color: rgb(12, 2, 2);
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
