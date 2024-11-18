@@ -15,7 +15,7 @@
     <ion-label color="primary" (click)="logout()">Cerrar Sesión</ion-label>
 </ion-item>
 
-<h4 id="centrar">Bienvenido Estudiante {{ username }}</h4>
+<h4 id="centrar">Bienvenido estudiante: {{ firstName }} {{ lastName }}</h4>
 
 <ion-list>
   <ion-item *ngFor="let barcode of barcodes">

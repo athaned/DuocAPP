@@ -7,7 +7,7 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">profesores</ion-title>
+      <ion-title size="large">Profesores</ion-title>
     </ion-toolbar>
   </ion-header>
 
@@ -15,7 +15,7 @@
     <ion-label color="primary" (click)="logout()">Cerrar Sesión</ion-label>
   </ion-item>
 
-  <h4 id="centrar">Bienvenido Profesor {{ username }}</h4>
+  <h4 id="centrar">Bienvenido Profesor: {{ firstName }} {{ lastName }}</h4>
   
   <ion-list>
     <ion-item button (click)="toggleMenu()" class="boton-clases">
@@ -31,10 +31,15 @@
     </ion-list>
   </ion-list>
 
+  <ion-list>
+    <ion-item *ngFor="let estudiante of estudiantes">
+      <ion-label>Estudiante: {{ estudiante.firstName }} {{ estudiante.lastName }} - {{ formatRUT(estudiante.rut) }}</ion-label>
+    </ion-item>
+  </ion-list>
+
   <qrcode *ngIf="qrCodeData" [qrdata]="qrCodeData" [width]="256" [errorCorrectionLevel]="'M'" class="qr-clases"></qrcode>
+
   <ion-button *ngIf="selectedClass" size="small" shape="round" (click)="deseleccionarClase()" class="boton-deseleccionar">
-      <ion-icon slot="icon-only" name="close"></ion-icon>
+    <ion-icon slot="icon-only" name="close"></ion-icon>
   </ion-button>
-
 </ion-content>
-

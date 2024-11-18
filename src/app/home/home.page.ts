@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavController, ToastController, LoadingController} from '@ionic/angular';
 import { WeatherService } from '../services/weather.service';
@@ -37,28 +37,30 @@ export class HomePage {
   }
 
   async login() {
+    const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
     
-    const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
-  
+    const matchedUser = storedUsers.find((user: any) => user.username === this.usuario && user.password === this.password);
+    
     console.log('Usuario ingresado:', this.usuario);
     console.log('Contraseña ingresada:', this.password);
-  
-    if (this.usuario === storedUser.username && this.password === storedUser.password) {
+    
+    if (matchedUser) {
       localStorage.setItem('ingresado', 'true');
-  
-      if (storedUser.userType === 'Profesor') {
+      localStorage.setItem('loggedInUser', JSON.stringify(matchedUser));
+      
+      if (matchedUser.userType === 'Profesor') {
         this.router.navigate(['/profesores'], { queryParams: { nombre: this.usuario } });
         this.showToast('Ingreso correctamente a "Profesores"');
-      } else if (storedUser.userType === 'Estudiante') {
+      } else if (matchedUser.userType === 'Estudiante') {
         this.router.navigate(['/estudiantes'], { queryParams: { nombre: this.usuario } });
         this.showToast('Ingreso correctamente a "Estudiantes"');
       }
+      
       const loading = await this.showLoading();
       loading.dismiss();
-
+      
       this.usuario = '';
       this.password = '';
-  
     } else {
       this.showToast('Credenciales inválidas. Por favor, verifica tu usuario y contraseña.');
     }

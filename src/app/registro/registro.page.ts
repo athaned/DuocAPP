@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController, ToastController, LoadingController} from '@ionic/angular';
+import { Component } from '@angular/core';
+import { NavController, ToastController, LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-registro',
@@ -7,30 +7,51 @@ import { NavController, ToastController, LoadingController} from '@ionic/angular
   styleUrls: ['./registro.page.scss'],
 })
 export class RegistroPage {
-
   username: string = '';
+  firstName: string = ''; 
+  lastName: string = '';  
   password: string = '';
-  userType: string = '';
-  selectedUserType: string = '';
-
+  rut: string = '';
+  professorCode: string = ''; 
+  selectedSegment: string = 'first'; 
+  
   constructor(
-    private navCtrl: NavController, 
+    private navCtrl: NavController,
     private toastController: ToastController,
     private loadingController: LoadingController
   ) {}
 
   async showLoading() {
     const loading = await this.loadingController.create({
-      message: 'Cargando...',  
-      spinner: 'crescent',     
-      duration: 3000,          
+      message: 'Cargando...',
+      spinner: 'crescent',
+      duration: 3000,
     });
-    await loading.present();  
-    return loading;  
+    await loading.present();
+    return loading;
   }
 
-  async register() {
-    if (!this.username || !this.password || !this.userType) {
+  formatRUT(rut: string): string {
+    rut = rut.replace(/[^0-9kK]/g, '');
+
+    if (rut.length > 1) {
+
+      const cuerpo = rut.slice(0, -1);
+      const verificador = rut.slice(-1);
+
+      const cuerpoConPuntos = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+      return `${cuerpoConPuntos}-${verificador.toUpperCase()}`;
+    }
+    return rut;
+  }
+
+  formatInputRUT() {
+    this.rut = this.formatRUT(this.rut);
+  }
+
+  async register(userType: string) {
+    if (!this.username || !this.password || !this.rut) {
       this.showToast('Por favor, completa todos los campos.');
       return;
     }
@@ -39,33 +60,60 @@ export class RegistroPage {
       this.showToast('La contraseña debe tener al menos 6 caracteres.');
       return;
     }
-  
-    const user = {
-      username: this.username,
-      password: this.password,
-      userType: this.userType
-    };
-  
-    localStorage.setItem('user', JSON.stringify(user));
-  
-    if (this.userType === 'Profesor') {
-      this.navCtrl.navigateRoot('/home');
-    } else if (this.userType === 'Estudiante') {
-      this.navCtrl.navigateRoot('/home');
+
+    if (userType === 'Profesor' && this.professorCode !== '12345') {
+      this.showToast('Código de Profesor incorrecto.');
+      return;
     }
+
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
+
+    const newUser: any = {
+      username: this.username,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      password: this.password,
+      userType: userType,
+      rut: this.rut,
+    };
+
+    if (userType === 'Estudiante' && loggedInUser && loggedInUser.userType === 'Profesor') {
+      newUser.professorId = loggedInUser.username;
+    }
+ 
+    const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+  
+    const existingUser = storedUsers.find((user: any) => user.rut === this.rut || user.username === this.username);
+    if (existingUser) {
+      this.showToast('El RUT o Usuario ya están registrados.');
+      return;
+    }
+
+    storedUsers.push(newUser);
+  
+    localStorage.setItem('users', JSON.stringify(storedUsers));
+
     const loading = await this.showLoading();
-      
-    this.showToast('Usuario correctamente registrado.');
     loading.dismiss();
+  
+    this.showToast('Usuario registrado correctamente.');
+  
     this.username = '';
     this.password = '';
-    this.userType = '';
-    this.selectedUserType = ''; 
-  }
+    this.rut = '';
+    this.firstName = '';
+    this.lastName = '';
   
-  selectUserType(type: string) {
-    this.userType = type;
-    this.selectedUserType = type; 
+    this.navCtrl.navigateRoot('/home');
+  }
+
+  resetFields() {
+    this.username = '';
+    this.firstName = '';
+    this.lastName = '';
+    this.password = '';
+    this.rut = '';
+    this.professorCode = '';
   }
 
   async showToast(message: string) {
@@ -76,5 +124,9 @@ export class RegistroPage {
       position: 'top',
     });
     toast.present();
+  }
+
+  segmentChanged(event: any) {
+    this.selectedSegment = event.detail.value;
   }
 }

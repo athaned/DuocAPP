@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
-import { AlertController, NavController, ToastController } from '@ionic/angular';
+import { AlertController, NavController, ToastController, LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-estudiantes',
@@ -11,25 +11,46 @@ export class EstudiantesPage implements OnInit {
   username: string = '';
   isSupported = false;
   barcodes: Barcode[] = [];
+  firstName: string = ""; 
+  lastName: string = "";
 
   constructor(
     private alertController: AlertController,
     private navCtrl: NavController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private loadingController: LoadingController
   ) {}
 
-  ngOnInit() {
-    BarcodeScanner.isSupported().then((result) => {
-      this.isSupported = result.supported;
+  async showLoading() {
+    const loading = await this.loadingController.create({
+      message: 'Cargando...',  
+      spinner: 'crescent',     
+      duration: 3000,          
     });
-    
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    await loading.present();  
+    return loading;  
   }
 
-  logout() {
+  ngOnInit() {
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
+    
+    if (loggedInUser) {
+      this.username = loggedInUser.username;
+      this.firstName = loggedInUser.firstName || '';
+      this.lastName = loggedInUser.lastName || '';
+    } else {
+      this.username = 'Invitado';
+      this.firstName = '';
+      this.lastName = '';
+    }
+  }
+
+  async logout() {
+    const loading = await this.showLoading();
     this.showToast('Se ha cerrado sesión correctamente.');
     localStorage.removeItem('ingresado');
     this.navCtrl.navigateRoot('/home');
+    loading.dismiss();
   }
 
   async scan(): Promise<void> {
